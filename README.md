@@ -1,2 +1,3 @@
 # grafana-demo-visualize
  
+## วิธีการรัน
