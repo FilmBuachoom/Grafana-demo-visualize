@@ -1,0 +1,13 @@
+Layer_name,config
+InputLayer,"{'batch_input_shape': (None, 224, 224, 3)}"
+Functional,inception_resnet_v2
+Flatten,-
+BatchNormalization,"{'momentum': 0.99, 'epsilon': 0.001}"
+Dense,"{'units': 1024, 'activation_function': 'tanh', 'kernel_initializer': 'GlorotUniform'}"
+BatchNormalization,"{'momentum': 0.99, 'epsilon': 0.001}"
+Dense,"{'units': 64, 'activation_function': 'tanh', 'kernel_initializer': 'GlorotUniform'}"
+BatchNormalization,"{'momentum': 0.99, 'epsilon': 0.001}"
+Dense,"{'units': 2, 'activation_function': 'softmax', 'kernel_initializer': 'GlorotUniform'}"
+Loss,categorical_crossentropy
+Optimizer,"{'name': 'SGD', 'learning_rate': 1e-04, 'decay': 0.0, 'momentum': 0.0, 'nesterov': False}"
+Train_params,"{'verbose': 1, 'epochs': 300, 'steps': 114}"

@@ -1,0 +1,1327 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "P59167EBB48F19DFB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 13,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "1d",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,6h),\n  count(hn) AS \"Count Request\"\nFROM predict_log\nWHERE\n  WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1) and\n  YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,6h)",
+          "refId": "Count",
+          "select": [
+            [
+              {
+                "params": [
+                  "hn"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "hn"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "text",
+          "where": []
+        }
+      ],
+      "title": "count request api",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "P59167EBB48F19DFB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 13,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,7d),\n  count(hn) AS \"Count Request\"\nFROM predict_log\nWHERE\n  WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1) and\n  YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)\nORDER BY $__timeGroup(timestamp,7d)",
+          "refId": "Count",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "django_admin_log",
+          "timeColumn": "action_time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "count request api",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-csv-datasource",
+        "uid": "PAE32E568D7348552"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^timestamp$/",
+          "values": true
+        },
+        "text": {
+          "valueSize": 25
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-csv-datasource",
+            "uid": "PAE32E568D7348552"
+          },
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": true,
+          "ignoreUnknown": false,
+          "refId": "A",
+          "schema": [
+            {
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "Update  time",
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "equal",
+                  "options": {
+                    "value": "best_model"
+                  }
+                },
+                "fieldName": "description"
+              }
+            ],
+            "match": "all",
+            "type": "include"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-csv-datasource",
+        "uid": "PAE32E568D7348552"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 16,
+        "y": 2
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^model_name$/",
+          "values": true
+        },
+        "text": {
+          "valueSize": 25
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-csv-datasource",
+            "uid": "PAE32E568D7348552"
+          },
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": true,
+          "ignoreUnknown": false,
+          "refId": "A",
+          "schema": [
+            {
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "Best model name",
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "equal",
+                  "options": {
+                    "value": "best_model"
+                  }
+                },
+                "fieldName": "description"
+              }
+            ],
+            "match": "all",
+            "type": "include"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-csv-datasource",
+        "uid": "PA72B07F402ABB145"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "displayMode": "color-text",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 8,
+        "x": 16,
+        "y": 4
+      },
+      "id": 6,
+      "options": {
+        "footer": {
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-csv-datasource",
+            "uid": "PA72B07F402ABB145"
+          },
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": true,
+          "ignoreUnknown": false,
+          "refId": "A",
+          "schema": [
+            {
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "Hyperparameters",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "P59167EBB48F19DFB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "True Positive"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "0"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "False Positive"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "0"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "False Negative"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "0"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "True Negative"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "0"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 0,
+        "y": 8
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "$__interval",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))\nGROUP BY WEEKOFYEAR(timestamp)",
+          "refId": "TP",
+          "select": [
+            [
+              {
+                "params": [
+                  "hn"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "hn"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "datatype": "bigint",
+              "name": "",
+              "params": [
+                "pred_cag",
+                "=",
+                "1"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))\nGROUP BY WEEKOFYEAR(timestamp)",
+          "refId": "FP",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))\nGROUP BY WEEKOFYEAR(timestamp)",
+          "refId": "FN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))\nGROUP BY WEEKOFYEAR(timestamp)",
+          "refId": "TN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Confusion Matrix",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "P59167EBB48F19DFB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 70
+              },
+              {
+                "color": "green",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 4,
+        "y": 8
+      },
+      "id": 11,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "TP",
+          "select": [
+            [
+              {
+                "params": [
+                  "cag_confirm"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": []
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "FP",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "FN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "TN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "($TP + $TN) / ($TP + $FP + $FN + $TN)",
+          "hide": false,
+          "refId": "Accuracy",
+          "type": "math"
+        }
+      ],
+      "title": "Accuracy",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "P59167EBB48F19DFB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 3,
+          "mappings": [
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "index": 0,
+                  "text": "0.000"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 25
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "green",
+                "value": 75
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "id": 13,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "TP",
+          "select": [
+            [
+              {
+                "params": [
+                  "cag_confirm"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": []
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Positive\"\nFROM predict_log\nWHERE\n  (pred_cag = 1 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "FP",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"False Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 1) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "FN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "P59167EBB48F19DFB"
+          },
+          "format": "table",
+          "group": [],
+          "hide": true,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(cag_confirm) as \"True Negative\"\nFROM predict_log\nWHERE\n  (pred_cag = 0 and cag_confirm = 0) and\n  (WEEKOFYEAR(timestamp) = (SELECT WEEKOFYEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1)) and\n  (YEAR(timestamp) = (SELECT YEAR(timestamp) FROM predict_log ORDER BY timestamp DESC LIMIT 1))",
+          "refId": "TN",
+          "select": [
+            [
+              {
+                "params": [
+                  "ep"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "predict_log",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$TP / ($TP + $FP)",
+          "hide": false,
+          "refId": "Precision",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$TP / ($TP + $FN)",
+          "hide": false,
+          "refId": "Recall",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "2 * ($Precision * $Recall) / ($Precision + $Recall)",
+          "hide": false,
+          "refId": "F1",
+          "type": "math"
+        }
+      ],
+      "title": "Metrics",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2022-11-17T14:20:00.000Z",
+    "to": "2022-11-17T15:40:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "API",
+  "uid": "N-cacSOVz",
+  "version": 10,
+  "weekStart": ""
+}

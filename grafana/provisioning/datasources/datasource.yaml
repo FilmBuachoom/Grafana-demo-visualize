@@ -1,0 +1,29 @@
+apiVersion: 1
+datasources:
+  - name: image_logging_model
+    type: marcusolsson-csv-datasource
+    editable: true
+    url: /etc/grafana/provisioning/datasources/model_log/log_2.csv
+    jsonData:
+      storage: local
+
+  - name: best_model_params
+    type: marcusolsson-csv-datasource
+    editable: true
+    url: /etc/grafana/provisioning/datasources/model_log/best_model/hyperparameters.csv
+    jsonData:
+      storage: local
+
+  - name: predict_image_log
+    type: mysql
+    url: mysql_db:3306
+    database: mock_up
+    user: root
+    jsonData:
+      maxOpenConns: 0 # Grafana v5.4+
+      maxIdleConns: 2 # Grafana v5.4+
+      connMaxLifetime: 14400 # Grafana v5.4+
+      storage: local
+    secureJsonData:
+      password: root
+      isDefault: true

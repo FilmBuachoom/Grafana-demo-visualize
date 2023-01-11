@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+  grafana:
+    image: grafana/grafana-oss:9.1.5-ubuntu
+    container_name: grafana
+    environment:
+      GF_INSTALL_PLUGINS: "marcusolsson-csv-datasource"
+      GF_PLUGIN_MARCUSOLSSON_CSV_DATASOURCE_ALLOW_LOCAL_MODE: 'true'
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_AUTH_DISABLE_SIGNOUT_MENU: "true"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_PLUGIN_ALLOW_LOCAL_MODE: "true"
+      TZ: Asia/Bangkok
+    volumes:
+      - ./grafana:/etc/grafana
+    ports:
+      - 9000:3000
+    restart: always
+
+  mysql:
+    container_name: mysql_db
+    image: mariadb:10.6
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - TZ=Asia/Bangkok
+      - MYSQL_DATABASE=mock_up
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=root
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    hostname: phpmyadmin
+    ports:
+      - 4306:80
+    environment:
+      - PMA_HOST=mysql_db
+
+  python:
+    build: .
+    volumes:
+      - ./:/app
+    container_name: "python"
+
+volumes:
+  db:
+    driver: local
+
